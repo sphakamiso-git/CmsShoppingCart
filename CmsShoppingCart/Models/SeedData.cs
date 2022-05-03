@@ -12,7 +12,7 @@ namespace CmsShoppingCart.Models
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            using(var context =new CmsShoppingCartContext(serviceProvider.GetRequiredService<DbContextOptions<CmsShoppingCartContext>>()))
+            using(var context =new CmsShoppingCartContextt(serviceProvider.GetRequiredService<DbContextOptions<CmsShoppingCartContextt>>()))
             {
                 if (context.Pages.Any())
                 {

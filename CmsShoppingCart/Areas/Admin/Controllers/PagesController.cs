@@ -12,9 +12,9 @@ namespace CmsShoppingCart.Areas.Admin.Controllers
     [Area("Admin")]
     public class PagesController : Controller
     {
-        private readonly CmsShoppingCartContext _context;
+        private readonly CmsShoppingCartContextt _context;
 
-        public PagesController(CmsShoppingCartContext context)
+        public PagesController(CmsShoppingCartContextt context)
         {
             this._context = context;
         }
@@ -34,7 +34,7 @@ namespace CmsShoppingCart.Areas.Admin.Controllers
             Page page = await _context.Pages.FirstOrDefaultAsync(c => c.Id == id);
             if (id == null)
             {
-                 return NotFound();
+                return NotFound();
             }
 
             return View(page);
@@ -54,7 +54,7 @@ namespace CmsShoppingCart.Areas.Admin.Controllers
                 page.Sorting = 100;
 
                 var slug = await _context.Pages.FirstOrDefaultAsync(x => x.Slug == page.Slug);
-                if(slug != null)
+                if (slug != null)
                 {
                     ModelState.AddModelError("", "The title already exists");
                     return View(page);
@@ -107,6 +107,43 @@ namespace CmsShoppingCart.Areas.Admin.Controllers
             }
 
             return View();
+        }
+
+        //GET/Admin/Delete
+        public async Task<IActionResult> Delete(int? id)
+        {
+            Page page = await _context.Pages.FindAsync(id);
+            if (page == null)
+            {
+                // NotFound();
+                TempData["Error"] = "The page does not Exist";
+            }
+            else
+            {
+                _context.Pages.Remove(page);
+                await _context.SaveChangesAsync();
+
+                TempData["success"] = "The page has been deleted";
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        //POST/Admin/Pages/reoder
+        [HttpPost]
+        public async Task<IActionResult> Reoder(int[] id)
+        {
+            int count = 1;
+
+            foreach (var pageId in id)
+            {
+                Page page = await _context.Pages.FindAsync(pageId);
+                page.Sorting = count;
+                _context.Update(page);
+                await _context.SaveChangesAsync();
+                count++;
+            }
+            return Ok();
         }
     }
 }

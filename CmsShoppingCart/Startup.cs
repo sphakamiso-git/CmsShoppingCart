@@ -28,7 +28,7 @@ namespace CmsShoppingCart
             services.AddControllersWithViews();
 
             //Configuring DBContext
-            services.AddDbContext<CmsShoppingCartContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CmsShoppingCartContext")));
+            services.AddDbContext<CmsShoppingCartContextt>(options => options.UseSqlServer(Configuration.GetConnectionString("CmsShoppingCartContextt")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
