@@ -1,7 +1,9 @@
 using CmsShoppingCart.Infrastructure;
+using CmsShoppingCart.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,9 +28,21 @@ namespace CmsShoppingCart
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddMemoryCache();
+            services.AddSession(options =>
+            {
+                //options.IdleTimeout = TimeSpan.FromSeconds(2);
+            });
 
+            services.AddRouting(options => options.LowercaseUrls = true);
             //Configuring DBContext
             services.AddDbContext<CmsShoppingCartContextt>(options => options.UseSqlServer(Configuration.GetConnectionString("CmsShoppingCartContextt")));
+            services.AddIdentity<AppUser, IdentityRole>(options => {
+                options.Password.RequiredLength = 4;
+                options.Password.RequireNonAlphanumeric = false;
+                    })
+                .AddEntityFrameworkStores<CmsShoppingCartContextt>()
+                .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,11 +62,24 @@ namespace CmsShoppingCart
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                "pages",
+                "{slug?}",
+                defaults: new {controller = "Pages", action = "Page"}
+             );     
+                endpoints.MapControllerRoute(
+                "products",
+                "products/{categorySlug}",
+                defaults: new {controller = "Products", action = "ProductsByCategory"}
+             );
                 endpoints.MapControllerRoute(
                 name: "areas",
                 pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
