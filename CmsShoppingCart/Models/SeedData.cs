@@ -45,7 +45,7 @@ namespace CmsShoppingCart.Models
                         Title = "Contact",
                         Slug = "contact",
                         Content = "contact page",
-                        Sorting = 100
+                        Sorting = 2
                     }
                 );
                 context.SaveChanges();

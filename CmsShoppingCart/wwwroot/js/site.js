@@ -1,7 +1,7 @@
 ﻿$(function () {
     if ($("a.confirmDeletion").length) {
         $("a.confirmDeletion").click(() => {
-            if (!confirm("confirm deletion")) return false;
+          if (!confirm("confirm deletion")) return false;
         });
     }
 

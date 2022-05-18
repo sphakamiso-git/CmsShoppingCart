@@ -27,7 +27,7 @@ namespace CmsShoppingCart.Infrastructure
                 };
             }
             return View(smallCartVM);
-            return View();
+            //return View();
         }
     }
 }

@@ -49,7 +49,7 @@ namespace CmsShoppingCart.Areas.Admin.Controllers
                 }
                 _context.Add(category);
                 await _context.SaveChangesAsync();
-                TempData["Success"] = "The category already exists";
+                TempData["Success"] = "The category has been added ";
                 return RedirectToAction(nameof(Index));
                 
             }
